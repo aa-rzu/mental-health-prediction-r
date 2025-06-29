@@ -1,0 +1,46 @@
+---
+title: "Mental Health Prediction in Tech"
+author: "Aarzu"
+output: html_document
+---
+
+# Introduction
+
+This project analyzes factors affecting mental health treatment decisions among tech workers.
+
+# Data Cleaning
+
+```{r}
+library(tidyverse)
+survey <- read_csv("survey.csv")
+survey_clean <- survey %>%
+  filter(Age > 18, Age < 65) %>%
+  mutate(across(where(is.character), as.factor))
+```
+
+# Exploratory Analysis
+
+```{r}
+ggplot(survey_clean, aes(x = family_history, fill = treatment)) +
+  geom_bar(position = "fill")
+```
+
+# Logistic Regression
+
+```{r}
+# Model training
+model <- glm(treatment ~ Age + family_history + benefits + care_options + anonymity + leave + supervisor,
+             data = survey_clean, family = "binomial")
+summary(model)
+```
+
+# Evaluation
+
+```{r}
+library(ROCR)
+# ROC curve and AUC code here
+```
+
+# Conclusion
+
+We found that workplace factors such as benefits and leave policy significantly impact whether employees seek mental health treatment.
